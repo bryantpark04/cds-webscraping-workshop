@@ -1,13 +1,16 @@
 # ------------------------------------------------------
-# CDS Web Scraping Workshop - 2/29/20
+# CDS Web Scraping Workshop
 # by Tushar Khan
+#
+# Created: February 29, 2020
+# Last Modified: October 23, 2021
 # ------------------------------------------------------
 
 import requests, pandas as pd
 from bs4 import BeautifulSoup
 
 # Create dataframe
-features = ['post score', 'post link', 'score', 'commenter', 'comment']
+features = ['post score', 'comment score', 'post link', 'commenter', 'comment']
 data = pd.DataFrame(columns=features)
 
 # Request top posts page
@@ -39,15 +42,20 @@ for i, link in enumerate(links):
 
     # Iterate over the comments
     for container in comments:
+
+        # Extract commenter - could be blank
+        commenter_tag = container.find(class_='author')
+        commenter = commenter_tag.text if commenter_tag is not None else '[deleted]'
+
+        # Extract comment text and score
         comment = container.find('div', class_='usertext-body').text.strip().replace('\n', ' ')
-        commenter = container.find(class_='author').text
         score = int(container.find(class_='score unvoted')['title'])
 
-        # Append row to dataframe
-        data = data.append(dict(zip(features, [op_score, link, score, commenter, comment])), ignore_index=True)
+        # Append data to dataframe
+        data = data.append(dict(zip(features, [op_score, score, link, commenter, comment])), ignore_index=True)
 
 # Write dataframe to csv
 data.to_csv('reddit_comments.csv', index=False)
 
 # Inspect dataset
-data.sort_values(by='score', ascending=False).head()
+data.sort_values(by='comment score', ascending=False).head()
