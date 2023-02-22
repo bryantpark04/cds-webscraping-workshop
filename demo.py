@@ -19,7 +19,7 @@ df = pd.DataFrame(columns=features)
 base_url   = 'https://old.reddit.com/r/Cornell/top/'
 user_agent = {'User-Agent': 'Mozilla/5.0'}
 
-r = requests.get(base_url, params={'t': 'all'}, headers=user_agent)
+r = requests.get(base_url, params={'t': 'all', 'limit': 5}, headers=user_agent)
 
 # Extract comment section links from the page
 soup = BeautifulSoup(r.text, 'lxml')
