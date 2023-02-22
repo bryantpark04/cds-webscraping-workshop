@@ -60,4 +60,4 @@ for i, link in enumerate(links):
 df.to_csv('reddit_comments.csv', index=False)
 
 # Inspect dataset
-df.sort_values(by='comment score', ascending=False).head()
+print(df.sort_values(by='comment score', ascending=False).head())
