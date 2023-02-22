@@ -1,9 +1,11 @@
 # ------------------------------------------------------
 # CDS Web Scraping Workshop
 # by Tushar Khan
+# adapted by Bryant Park
 #
 # Created: February 29, 2020
-# Last Modified: October 23, 2021
+# Last Modified: October 23, 2021 (by Tushar)
+# Forked: February 21, 2023
 # ------------------------------------------------------
 
 import requests, pandas as pd
@@ -14,7 +16,7 @@ features = ['post score', 'comment score', 'post link', 'commenter', 'comment']
 data = pd.DataFrame(columns=features)
 
 # Request top posts page
-base_url   = 'https://old.reddit.com/r/all/top/'
+base_url   = 'https://old.reddit.com/r/Cornell/top/'
 user_agent = {'User-Agent': 'Mozilla/5.0'}
 
 r = requests.get(base_url, params={'t': 'all'}, headers=user_agent)
