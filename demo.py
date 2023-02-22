@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 # Create dataframe
 features = ['post score', 'comment score', 'post link', 'commenter', 'comment']
-data = pd.DataFrame(columns=features)
+df = pd.DataFrame(columns=features)
 
 # Request top posts page
 base_url   = 'https://old.reddit.com/r/Cornell/top/'
@@ -29,7 +29,7 @@ links = [tag['href'] for tag in link_tags]
 
 # Iterate over the links
 for i, link in enumerate(links):
-    print(f'Scraping data from link {i+1} of {len(links)}')
+    print(f'Scraping data from post {i+1} of {len(links)}')
 
     r = requests.get(link, params={'sort': 'top'}, headers=user_agent)
     soup = BeautifulSoup(r.text, 'lxml')
@@ -54,10 +54,10 @@ for i, link in enumerate(links):
         score = int(container.find(class_='score unvoted')['title'])
 
         # Append data to dataframe
-        data = data.append(dict(zip(features, [op_score, score, link, commenter, comment])), ignore_index=True)
+        df.loc[len(df.index)] = [op_score, score, link, commenter, comment]
 
 # Write dataframe to csv
-data.to_csv('reddit_comments.csv', index=False)
+df.to_csv('reddit_comments.csv', index=False)
 
 # Inspect dataset
-data.sort_values(by='comment score', ascending=False).head()
+df.sort_values(by='comment score', ascending=False).head()
